@@ -1,7 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable prefer-template */
-/* eslint-disable id-length */
-function getRandomInt(from, to) {
+const getRandomInt = (from, to) => {
   if (from < 0 || to <0) {
     return;
   }
@@ -11,34 +8,34 @@ function getRandomInt(from, to) {
   from = Math.ceil(from);
   to = Math.floor(to);
   return (Math.floor(Math.random() * (to - from + 1)) + from);
-}/*Как сделать так, чтоюы случайное число сразу от 0 до бесконечности было?
-   В условиях нет верхней границы. Чтобы параметры не прописывать*/
+};
 
-function getRandomNumber(from, to) {
+const getRandomNumber = (from, to, digits) => {
   if (from < 0 || to <0){
     return;
   }
   if (from >to ) {
     [from, to]=[to,from];
   }
-  return Math.random() * (to - from) + from;
-}
-
-const noRepeat = (someArray) => {
-  for (let i=0; i< someArray.length; i++) {
-    const randomElement = Math.floor(Math.random() * (someArray.length - i)) + i;
-    const element = someArray[randomElement];
-    someArray[randomElement] = someArray[i];
-    someArray[i] = element;
-    return someArray [i];
-  }
+  const randomNumber = Math.random() * (to - from) + from;
+  return +randomNumber.toFixed(digits);
 };
 
-const getOneOfAll = (totalArray) => {
-  const oneElement = Math.floor(Math.random() * totalArray.length);
-  return totalArray[oneElement];
-};
+const getRandomIndex = (array) => Math.floor(Math.random() * array.length);
 
+const getRandomArrayElement = (array) => array[getRandomIndex (array)];
+
+const removeDuplicate = (array) => array.filter((element) => array.indexOf(element) === array.lastIndexOf(element));
+
+const getRandomLength = (array) => getRandomInt (1, array.length);
+
+const createArrayRandomLength = (array) => Array.from({length: getRandomLength(array)}, (_, index) => array[index]);
+
+const getNoRepeatRandomElement = (array) => {
+  const randomIndex = getRandomIndex(array);
+  const randomElement = array.splice(randomIndex, 1);
+  return randomElement;
+};
 
 const AUTHOR = {
   avatar: [
@@ -53,16 +50,10 @@ const AUTHOR = {
     'img/avatars/user09.png',
     'img/avatars/user10.png'],
 };
+
 const OFFER = {
   title: ['Сдается чудесное жилье','Вы могли бы пожить здесь', 'Жилье для вас'],
-  address: {
-    lat: getRandomNumber(35.65000, 35.70000),
-    lng:  getRandomNumber ( 139.70000, 139.80000)}, /* Тут в итоге будет то же, что и в location,
-  но и просто сослаться на LOCATION не получилось, и скопировать значения оттуда тоже. Выдает в итоге [Object, Object]*/
-  price: getRandomInt(0,1000000000),/*Надо бы getRandomInt() */
   type: ['palace', 'flat', 'house', 'bungalow','hotel'],
-  rooms: getRandomInt(0,1000000000),/*Надо бы getRandomInt() */
-  guests: getRandomInt(0,1000000000),/*Надо бы getRandomInt() */
   checkin: ['12:00', '13:00','14:00'],
   checkout:['12:00', '13:00','14:00'],
   features: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
@@ -72,47 +63,39 @@ const OFFER = {
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
     'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
-  ], /*массив строк — массив случайной длины из значений. Массив случайной длины сделать не получилось.
-  Точнее, Случайная длина получилась, но значения Undefinded*/
-
+  ],
 };
 
-/* Начало попытки сделать массив случайной длины*/
-const randomLength = getRandomInt (1, OFFER.photos.length);
-console.log (randomLength);
-const createNewArray = (_firstArray) => { _firstArray.slice(0);};
-
-const newArrayPhotos = Array.from({length: randomLength}, createNewArray(OFFER['photos']));
-console.log (newArrayPhotos);
-/* Конец */
-
-const LOCATION = {
-  lat: getRandomNumber(35.65000, 35.70000),
-  lng:  getRandomNumber ( 139.70000, 139.80000),
-};
+const getLocation = () => ({
+  lat: getRandomNumber (35.65000, 35.70000, 5),
+  lng: getRandomNumber ( 139.70000, 139.80000, 5),
+});
 
 const OFFERS_COUNT = 10;
 
-const getRandomArrayElement = (elements) => elements[Math.floor(Math.random() * (elements.length))];
+const createOffer = () => {
+  const location = getLocation();
 
-const createOffer = () => ({
-  author: 'avatar: ' + noRepeat(AUTHOR.avatar),
-  offer:[
-    'title: '+ getRandomArrayElement(OFFER.title),
-    'address: ' + OFFER.address, /*Выдает [Object, Object]*/
-    'price: ' + OFFER.price,
-    'type: ' + getOneOfAll(OFFER.type),
-    'rooms: ' + OFFER.rooms,
-    'guests: ' + OFFER.guests,
-    'checkin: ' + getOneOfAll(OFFER.checkin),
-    'checkout: ' + getOneOfAll(OFFER.checkout),
-    'features: ' + noRepeat (OFFER.features),
-    'description: ' + getRandomArrayElement(OFFER.description),
-    'photos: ' + newArrayPhotos, /*Так не получается, хотя выше выдавал случайную длину*/
-  ],
-  location: LOCATION,
-});
+  return {
+    author: {avatar: getNoRepeatRandomElement(AUTHOR.avatar)},
+    offer: {
+      title: getRandomArrayElement(OFFER.title),
+      address: `${location.lat}, ${location.lng}`,
+      price: getRandomInt(1,10000),
+      type: getRandomArrayElement(OFFER.type),
+      rooms: getRandomInt(1,10),
+      guests: getRandomInt(1,10),
+      checkin: getRandomArrayElement(OFFER.checkin),
+      checkout: getRandomArrayElement(OFFER.checkout),
+      features: removeDuplicate (createArrayRandomLength(OFFER.features)),
+      description: getRandomArrayElement(OFFER.description),
+      photos: createArrayRandomLength(OFFER.photos),
+    },
+    location,
+  };
+};
 
 const allOffers = Array.from({length: OFFERS_COUNT}, createOffer);
 
 console.log (allOffers);
+
