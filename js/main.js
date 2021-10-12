@@ -97,5 +97,6 @@ const createOffer = () => {
 
 const allOffers = Array.from({length: OFFERS_COUNT}, createOffer);
 
+// eslint-disable-next-line no-console
 console.log (allOffers);
 
