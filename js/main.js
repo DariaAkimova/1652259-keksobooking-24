@@ -77,7 +77,7 @@ const createOffer = () => {
   const location = getLocation();
 
   return {
-    author: {avatar: getNoRepeatRandomElement(AUTHOR.avatar)},
+    author: {avatar: `${getNoRepeatRandomElement(AUTHOR.avatar)}`},
     offer: {
       title: getRandomArrayElement(OFFER.title),
       address: `${location.lat}, ${location.lng}`,
