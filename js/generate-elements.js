@@ -39,7 +39,7 @@ similarOffers.forEach(( dataForCard) => {
     if (!isNesessary)
     {featureItem.remove();}
     dataForCard.offer.features.forEach((nesessaryFeature) => {
-      if (featureItem.classList.contains(`popup__feature--${nesessaryFeature}`)) {featureItem.classList.textContent = nesessaryFeature;}
+      if (featureItem.classList.contains(`popup__feature--${nesessaryFeature}`)) {featureItem.textContent = nesessaryFeature;}
     });
   });
 
