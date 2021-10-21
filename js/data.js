@@ -64,9 +64,6 @@ const createOffer = () => {
     location,
   };
 };
-const createAllOffers =()=> Array.from({length: OFFERS_COUNT}, createOffer);
+const createAllOffers = Array.from({length: OFFERS_COUNT}, createOffer);
 
-// eslint-disable-next-line no-console
-console.log (createAllOffers());
-
-export {/*createOffer,*/createAllOffers};
+export {createAllOffers};
