@@ -15,7 +15,7 @@ similarOffers.forEach(( dataForCard) => {
   const offerType = similarCards.querySelector('.popup__type');
   const offerCapacity = similarCards.querySelector('.popup__text--capacity');
   const offerTime = similarCards.querySelector('.popup__text--time');
-  const someFeatures = similarCards.querySelectorAll('.popup__feature');
+  const offerFeatures = similarCards.querySelectorAll('.popup__feature');
   const offerDescription = similarCards.querySelector('.popup__description');
   const offerPhotosList = similarCards.querySelector('.popup__photos');
   const onePhoto = similarCards.querySelector('.popup__photo');
@@ -40,14 +40,14 @@ similarOffers.forEach(( dataForCard) => {
       offerType.textContent = 'Дворец';
       break;
     case 'hotel':
-      offerType.textContent = 'Отлеь';
+      offerType.textContent = 'Отель';
       break;
   }
 
   offerCapacity.textContent = `${dataForCard.offer.rooms} комнаты для ${dataForCard.offer.guests} гостей`;
   offerTime.textContent = `Заезд после ${dataForCard.offer.checkin}, выезд до ${dataForCard.offer.checkout}`;
 
-  someFeatures.forEach((featureItem) => {
+  offerFeatures.forEach((featureItem) => {
     const isNesessary = dataForCard.offer.features.some((ourFeature) => featureItem.classList.contains(`popup__feature--${ourFeature}`));
     if (!isNesessary){
       featureItem.classList.add('hidden');
@@ -70,16 +70,25 @@ similarOffers.forEach(( dataForCard) => {
 
 mapCanvas.appendChild(offerCardFragment.children[0]);
 
-const fieldsOfCard = document.querySelector('.popup').children;
-const createNoDataAction = (someField) => {
-  if (someField.textContent === false || someField.src=== false) {
-    someField.classList.add('hidden');
-  }
-};
 
-for (const field of fieldsOfCard) {
-  createNoDataAction(field);
-}
+const fieldTitle = mapCanvas.querySelector('.popup__title');
+const fieldAddress = mapCanvas.querySelector('.popup__text--address');
+const fieldPrice = mapCanvas.querySelector('.popup__text--price');
+const fieldType = mapCanvas.querySelector('.popup__type');
+const fieldCapacity = mapCanvas.querySelector('.popup__text--capacity');
+const fieldTime = mapCanvas.querySelector('.popup__text--time');
+const fieldDescription = mapCanvas.querySelector('.popup__description');
+const fieldPhotos = mapCanvas.querySelectorAll('.popup__photo');
+const fieldAvatar = mapCanvas.querySelector('.popup__avatar');
+
+const allFields = [fieldAddress, fieldCapacity, fieldDescription, ...fieldPhotos, fieldPrice, fieldTime, fieldTitle, fieldType, fieldAvatar];
+
+allFields.forEach((someField) => {
+  if (someField.tagName === 'IMG'  && !someField.src || !someField.textContent) {
+    someField.classList.add('hidden');
+  } else {
+    someField.classList.remove('hidden');
+  }
+});
 
 export {mapCanvas};
-
