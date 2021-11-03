@@ -1,8 +1,7 @@
-import {createAllOffers} from './data.js';
+import {similarOffers} from './data.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content;
-const similarOffers = createAllOffers;
 const offerCardFragment = document.createDocumentFragment();
 
 similarOffers.forEach(( dataForCard) => {
@@ -84,10 +83,11 @@ const fieldAvatar = mapCanvas.querySelector('.popup__avatar');
 const allFields = [fieldAddress, fieldCapacity, fieldDescription, ...fieldPhotos, fieldPrice, fieldTime, fieldTitle, fieldType, fieldAvatar];
 
 allFields.forEach((someField) => {
-  if (someField.tagName === 'IMG'  && !someField.src || !someField.textContent) {
+  if (
+    (someField.tagName === 'IMG' && !someField.src) ||
+    (someField.tagName !== 'IMG' && !someField.textContent)
+  ) {
     someField.classList.add('hidden');
-  } else {
-    someField.classList.remove('hidden');
   }
 });
 

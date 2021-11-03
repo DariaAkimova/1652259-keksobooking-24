@@ -64,6 +64,6 @@ const createOffer = () => {
     location,
   };
 };
-const createAllOffers = Array.from({length: OFFERS_COUNT}, createOffer);
+const similarOffers = Array.from({length: OFFERS_COUNT}, createOffer);
 
-export {createAllOffers};
+export {similarOffers};
