@@ -63,9 +63,9 @@ roomsList.addEventListener('change', getRoomGuestsRelation);
 
 addressInput.addEventListener('invalid', () => {
   if (addressInput.validity.valueMissing) {
-    priceInput.setCustomValidity('Поле должно быть заполнено');
+    addressInput.setCustomValidity('Поле должно быть заполнено');
   }  else {
-    priceInput.setCustomValidity('');
+    addressInput.setCustomValidity('');
   }
 },
 );
