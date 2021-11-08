@@ -2,7 +2,6 @@ const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
 const roomsList  = document.querySelector('#room_number');
 const capacityList  = document.querySelector('#capacity');
-const addressInput = document.querySelector('#address');
 const guests = capacityList.querySelectorAll('option');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -60,14 +59,5 @@ const getRoomGuestsRelation = () => {
 };
 
 roomsList.addEventListener('change', getRoomGuestsRelation);
-
-addressInput.addEventListener('invalid', () => {
-  if (addressInput.validity.valueMissing) {
-    addressInput.setCustomValidity('Поле должно быть заполнено');
-  }  else {
-    addressInput.setCustomValidity('');
-  }
-},
-);
 
 
