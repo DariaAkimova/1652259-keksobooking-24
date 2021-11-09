@@ -73,6 +73,7 @@ const makeAllDisabled = () => {
 
 makeAllDisabled();
 
+// eslint-disable-next-line no-unused-vars
 const makeAllAktive = () => {
   infoForm.classList.remove('ad-form--disabled');
   formFieldsets.forEach((input)=> input.setAttribute('disabled','false'));
