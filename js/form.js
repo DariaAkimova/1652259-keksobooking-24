@@ -1,3 +1,6 @@
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_PRICE = 1000000;
 const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
 const roomsList  = document.querySelector('#room_number');
@@ -7,9 +10,22 @@ const infoForm = document.querySelector('.ad-form');
 const formFieldsets = infoForm.querySelectorAll('fieldset');
 const mapFiltersForm = document.querySelector('.map__filters');
 const allFilters = mapFiltersForm.querySelectorAll('select');
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
-const MAX_PRICE = 1000000;
+
+const makeAllDisabled = () => {
+  infoForm.classList.add('ad-form--disabled');
+  formFieldsets.forEach((fieldset)=> fieldset.setAttribute('disabled','true'));
+  mapFiltersForm.classList.add('ad-form--disabled');
+  allFilters.forEach((input)=> input.setAttribute('disabled','true'));
+};
+
+makeAllDisabled();
+
+const makeAllAktive = () => {
+  infoForm.classList.remove('ad-form--disabled');
+  formFieldsets.forEach((fieldset)=> fieldset.removeAttribute('disabled'));
+  mapFiltersForm.classList.remove('ad-form--disabled');
+  allFilters.forEach((fieldset)=> fieldset.removeAttribute('disabled'));
+};
 
 titleInput.addEventListener('input', ()=> {
   const titleLength = titleInput.value.length;
@@ -64,20 +80,5 @@ const getRoomGuestsRelation = () => {
 
 roomsList.addEventListener('change', getRoomGuestsRelation);
 
-const makeAllDisabled = () => {
-  infoForm.classList.add('ad-form--disabled');
-  formFieldsets.forEach((input)=> input.setAttribute('disabled','true'));
-  mapFiltersForm.classList.add('ad-form--disabled');
-  allFilters.forEach((input)=> input.setAttribute('disabled','true'));
-};
 
-makeAllDisabled();
-
-// eslint-disable-next-line no-unused-vars
-const makeAllAktive = () => {
-  infoForm.classList.remove('ad-form--disabled');
-  formFieldsets.forEach((input)=> input.removeAttribute('disabled'));
-  mapFiltersForm.classList.remove('ad-form--disabled');
-  allFilters.forEach((input)=> input.removeAttribute('disabled'));
-};
-
+export {makeAllAktive};

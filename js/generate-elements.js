@@ -1,6 +1,6 @@
 import {similarOffers} from './data.js';
 
-const mapCanvas = document.querySelector('#map-canvas');
+//const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 
@@ -17,8 +17,10 @@ similarOffers.forEach(( dataForCard) => {
   const offerFeatures = similarCards.querySelectorAll('.popup__feature');
   const offerDescription = similarCards.querySelector('.popup__description');
   const offerPhotosList = similarCards.querySelector('.popup__photos');
+  const offerPhotos = similarCards.querySelectorAll('.popup__photo');
   const onePhoto = similarCards.querySelector('.popup__photo');
   const avatar = similarCards.querySelector('.popup__avatar');
+  const allFields = [offerAddress, offerCapacity, offerDescription, ...offerPhotos, offerPrice, offerTime, offerTitle, offerType, avatar];
 
   offerTitle.textContent = dataForCard.offer.title;
   offerAddress.textContent = dataForCard.offer.address;
@@ -64,31 +66,19 @@ similarOffers.forEach(( dataForCard) => {
 
   avatar.src = dataForCard.author.avatar;
 
+  allFields.forEach((someField) => {
+    if (
+      (someField.tagName === 'IMG' && !someField.src) ||
+        (someField.tagName !== 'IMG' && !someField.textContent)
+    ) {
+      someField.classList.add('hidden');
+    }
+  });
+
   offerCardFragment.appendChild(similarCards);
 });
 
-mapCanvas.appendChild(offerCardFragment.children[0]);
+const  allOffersArray = [...offerCardFragment.children];
 
+export {allOffersArray};
 
-const fieldTitle = mapCanvas.querySelector('.popup__title');
-const fieldAddress = mapCanvas.querySelector('.popup__text--address');
-const fieldPrice = mapCanvas.querySelector('.popup__text--price');
-const fieldType = mapCanvas.querySelector('.popup__type');
-const fieldCapacity = mapCanvas.querySelector('.popup__text--capacity');
-const fieldTime = mapCanvas.querySelector('.popup__text--time');
-const fieldDescription = mapCanvas.querySelector('.popup__description');
-const fieldPhotos = mapCanvas.querySelectorAll('.popup__photo');
-const fieldAvatar = mapCanvas.querySelector('.popup__avatar');
-
-const allFields = [fieldAddress, fieldCapacity, fieldDescription, ...fieldPhotos, fieldPrice, fieldTime, fieldTitle, fieldType, fieldAvatar];
-
-allFields.forEach((someField) => {
-  if (
-    (someField.tagName === 'IMG' && !someField.src) ||
-    (someField.tagName !== 'IMG' && !someField.textContent)
-  ) {
-    someField.classList.add('hidden');
-  }
-});
-
-export {mapCanvas};
