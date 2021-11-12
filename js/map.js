@@ -1,6 +1,8 @@
-import {similarOffers} from './data.js';
-import {allOffersArray} from './generate-elements.js';
+//import {similarOffers} from './data.js';
+
+//import {allOffersArray} from './generate-elements.js';
 import { makeAllAktive } from './form.js';
+import './main.js';
 
 const map = L.map('map-canvas')
   .on ('load', makeAllAktive)
@@ -50,19 +52,22 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-similarOffers.forEach ((dataForCard, idx) => {
-  const offerLat = dataForCard.location.lat;
-  const offerLng = dataForCard.location.lng;
+const renderMarkers = (offersArray, arrayForPopup ) => {
+  offersArray.forEach ((dataForCard, idx) => {
+    const offerLat = dataForCard.location.lat;
+    const offerLng = dataForCard.location.lng;
 
-  const marker = L.marker({
-    lat: offerLat,
-    lng: offerLng,
-  }, {
-    icon,
-  },
-  );
+    const marker = L.marker({
+      lat: offerLat,
+      lng: offerLng,
+    }, {
+      icon,
+    },
+    );
 
-  marker
-    .addTo(map)
-    .bindPopup(allOffersArray[idx]);
-});
+    marker
+      .addTo(map)
+      .bindPopup(arrayForPopup[idx]);
+  });
+};
+export {mainMarker, renderMarkers};
