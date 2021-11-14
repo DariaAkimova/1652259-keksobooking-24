@@ -44,7 +44,7 @@ titleInput.addEventListener('input', ()=> {
 priceInput.addEventListener('input', () => {
   const price = priceInput.value;
   if (price > MAX_PRICE) {
-    priceInput.setCustomValidity (`Цена за ночь не может превышать ${MAX_PRICE}`);
+    priceInput.setCustomValidity (`Цена за ночь не может превышать ${MAX_PRICE} ₽/ночь`);
   } else {
     priceInput.setCustomValidity('');
   }

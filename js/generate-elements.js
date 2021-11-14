@@ -14,11 +14,11 @@ const renderSimilarOffers = (similarOffers) => {
     const offerType = similarCards.querySelector('.popup__type');
     const offerCapacity = similarCards.querySelector('.popup__text--capacity');
     const offerTime = similarCards.querySelector('.popup__text--time');
-    const offerFeatures = similarCards.querySelectorAll('.popup__feature');
+    //const offerFeatures = similarCards.querySelectorAll('.popup__feature');
     const offerDescription = similarCards.querySelector('.popup__description');
-    const offerPhotosList = similarCards.querySelector('.popup__photos');
+    //const offerPhotosList = similarCards.querySelector('.popup__photos');
     const offerPhotos = similarCards.querySelectorAll('.popup__photo');
-    const onePhoto = similarCards.querySelector('.popup__photo');
+    //const onePhoto = similarCards.querySelector('.popup__photo');
     const avatar = similarCards.querySelector('.popup__avatar');
     const allFields = [offerAddress, offerCapacity, offerDescription, ...offerPhotos, offerPrice, offerTime, offerTitle, offerType, avatar];
 

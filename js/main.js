@@ -21,9 +21,9 @@ const showAlert = (message) => {
 
 getData (
   (offers) => {
-    renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT))
-    const popupOffers = renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT));
-    renderMarkers(offers, popupOffers);
+    const offersForMap = offers.slice(0, MAX_OFFERS_COUNT);
+    const popupOffers = renderSimilarOffers(offersForMap);
+    renderMarkers(offersForMap, popupOffers);
   },
   () =>   showAlert('Ошибка загрузки данных'),
 );

@@ -1,6 +1,3 @@
-//import {similarOffers} from './data.js';
-
-//import {allOffersArray} from './generate-elements.js';
 import { makeAllAktive } from './form.js';
 import './main.js';
 

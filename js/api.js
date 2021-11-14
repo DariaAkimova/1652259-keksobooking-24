@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
-//import { renderSimilarOffers } from './generate-elements.js';
 import {DEFAULT_MARKER, mainMarker} from './map.js';
 
+const serverLink = 'https://24.javascript.pages.academy/keksobooking';
 const offerForm = document.querySelector ('.ad-form');
 const allForms = document.querySelectorAll('form');
 // const allSelectForms = offerForm.querySelectorAll ('select');
@@ -10,15 +9,15 @@ const allForms = document.querySelectorAll('form');
 //const filtersArea = document.querySelector('.map__filters');
 // const selectFilters = filtersArea.querySelectorAll('select');
 // const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
-const resetButton = document.querySelector('.ad-form__reset');
+//const resetButton = document.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success');
-const successMessage = successMessageTemplate.cloneNode(true);
+const successMessage = successMessageTemplate.cloneNode(true).content;
 const errorMessageTemplate = document.querySelector('#error');
-const closeErrorButton = document.querySelector('.error__button');
-const errorMessage = errorMessageTemplate.cloneNode(true);
+const errorMessage = errorMessageTemplate.cloneNode(true).content;
+const closeErrorButton = errorMessage.querySelector('.error__button');
 
 const getData = (onSuccess, onFail) => {
-  fetch ('https://24.javascript.pages.academy/keksobooking/data')
+  fetch (`${serverLink}/data`)
     .then((response)  => {
       if (response.ok) {
         return response.json();
@@ -27,19 +26,16 @@ const getData = (onSuccess, onFail) => {
       }
     })
     .then((offers) => {
-      //console.error (renderSimilarOffers(offers.slice(0, 10)));
-      // console.log(renderSimilarOffers(offers.slice(0, 10)));
       onSuccess (offers);
     })
     .catch ((err) => {
-     // console.error(err);
       onFail(err);
     });
 };
 
-const sendData = (onSuccess, onFail,  body) => {
+const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://24.javascript.pages.academy/keksobooking',
+    serverLink,
     {
       method: 'POST',
       body,
@@ -48,12 +44,10 @@ const sendData = (onSuccess, onFail,  body) => {
     if (response.ok) {
       onSuccess();
     } else {
-      throw new Error();
+      onFail();
     }
   })
-    .catch ((err) => {
-      // eslint-disable-next-line no-console
-      //console.error(err);
+    .catch (() => {
       onFail();
     });
 
@@ -64,12 +58,13 @@ const clearAll = () => {
 };
 
 const closeMessage = (typeOfMessage) => {
-  typeOfMessage.classList.add('hidden');
+  //typeOfMessage.classList.add('hidden');
+  document.body.removeChild(typeOfMessage);
 };
 
 const showErrorMessage = () => {
-  document.body.append(errorMessage);
-  closeErrorButton.addEventListener('click', closeMessage (errorMessage));
+  document.body.appendChild(errorMessage);
+  closeErrorButton.addEventListener('click', () => closeMessage(errorMessage));
 };
 
 const setOfferFormSubmit = (onSuccess) => {
@@ -80,33 +75,30 @@ const setOfferFormSubmit = (onSuccess) => {
     sendData (
       onSuccess,
       showErrorMessage,
-      () => new FormData(evt.target),
+      new FormData(evt.target),
     );
   });
 };
 
-
 const showSuccesMessage = () => {
-  document.body.append(successMessage);
+  document.body.appendChild(successMessage);
   clearAll();
 };
 
 setOfferFormSubmit(showSuccesMessage);
 
-
-
 document.addEventListener('click', () => {
-  closeMessage (errorMessage);
-  closeMessage (successMessage);
+  closeMessage(errorMessage);
+  closeMessage(successMessage);
 });
 document.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {
     evt.preventDefault();
-    closeMessage (errorMessage);
-    closeMessage (successMessage);
+    closeMessage(errorMessage);
+    closeMessage(successMessage);
   }
 });
 
-resetButton.addEventListener('click', clearAll);
+//resetButton.addEventListener('click', clearAll);
 
 export {getData};
