@@ -26,15 +26,17 @@ const getData = (onSuccess, onFail) => {
       }
     })
     .then((offers) => {
-      onSuccess (offers);
+      //console.error (renderSimilarOffers(offers.slice(0, 10)));
+      console.log(renderSimilarOffers(offers.slice(0, 10)));
+      //onSuccess (offers);
     })
     .catch ((err) => {
+      console.error(err);
       onFail(err);
     });
 };
 
-
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess, onFail,  body) => {
   fetch(
     'https://24.javascript.pages.academy/keksobooking',
     {
@@ -50,12 +52,12 @@ const sendData = (onSuccess, onFail, body) => {
   })
   // .then(showSuccesMessage)
     .catch ((err) => {
-      // console.log('error');
+      // eslint-disable-next-line no-console
+      //console.error(err);
       onFail();
     });
+
 };
-
-
 const clearAll = () => {
   allInputForms.forEach((input) => input.value = '');
   addressInput.value = '35.68950, 139.69171';
@@ -75,7 +77,7 @@ const closeMessage = (typeOfMessage) => {
 };
 
 const showErrorMessage = () => {
-  document.body.appendChild(errorMessage);
+  document.body.append(errorMessage);
 
   closeErrorButton.addEventListener('click', closeMessage (errorMessage));
   document.addEventListener('click', () => closeMessage (errorMessage));
@@ -85,10 +87,7 @@ const showErrorMessage = () => {
       closeMessage (errorMessage);
     }
   });
-  //Оставила обработчики в этой функции, потому что они должны висеть только тогда,
-  //когда окно с ошибкой открыто. Пока не сообразила, как это еще модно сделать. То же самое внизу с saccess message
 };
-
 
 const setOfferFormSubmit = (onSuccess) => {
 
@@ -103,6 +102,7 @@ const setOfferFormSubmit = (onSuccess) => {
   });
 };
 
+
 const showSuccesMessage = (clearFunction) => {
   document.body.append(successMessage);
 
@@ -114,8 +114,7 @@ const showSuccesMessage = (clearFunction) => {
     }
   });
   clearFunction();
-}; //нам надо, чтобы при успешной отправке данных и сообщение открывалось, и все поля очищались. Можно вставить clearAll коллбэкком?
-  //Или как это лучше реализовать?
+};
 
 setOfferFormSubmit(showSuccesMessage);
 

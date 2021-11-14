@@ -5,7 +5,9 @@ const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 
 const renderSimilarOffers = (similarOffers) => {
+
   similarOffers.forEach(( dataForCard) => {
+
 
     const similarCards = cardTemplate.cloneNode(true);
 
@@ -49,21 +51,23 @@ const renderSimilarOffers = (similarOffers) => {
     offerCapacity.textContent = `${dataForCard.offer.rooms} комнаты для ${dataForCard.offer.guests} гостей`;
     offerTime.textContent = `Заезд после ${dataForCard.offer.checkin}, выезд до ${dataForCard.offer.checkout}`;
 
-    offerFeatures.forEach((featureItem) => {
-      const isNesessary = dataForCard.offer.features.some((ourFeature) => featureItem.classList.contains(`popup__feature--${ourFeature}`));
-      if (!isNesessary){
-        featureItem.classList.add('hidden');
-      }
-    });
+    // offerFeatures.forEach((featureItem) => {
+    //       const isNesessary = dataForCard.offer.features.some((ourFeature) => featureItem.classList.contains(`popup__feature--${ourFeature}`));
+    //   if (!isNesessary){
+    //     featureItem.classList.add('hidden');
+    //   }
+    // });
 
     offerDescription.textContent = dataForCard.offer.description;
 
-    for (const  photo of dataForCard.offer.photos) {
-      const newPhoto = onePhoto.cloneNode();
-      newPhoto.src = photo;
-      offerPhotosList.appendChild(newPhoto);
-    }
-    onePhoto.classList.add('hidden');
+
+    // dataForCard.offer.photos.forEach((photo) => {
+    //   const newPhoto = onePhoto.cloneNode();
+    //   newPhoto.src = photo;
+    //   offerPhotosList.appendChild(newPhoto);
+    // });
+    // onePhoto.classList.add('hidden');
+
 
     avatar.src = dataForCard.author.avatar;
 
@@ -75,11 +79,12 @@ const renderSimilarOffers = (similarOffers) => {
         someField.classList.add('hidden');
       }
     });
-
     offerCardFragment.appendChild(similarCards);
   });
-};
-const  allOffersArray = [...offerCardFragment.children];
+  return [...offerCardFragment.children];
 
-export {allOffersArray, renderSimilarOffers};
+};
+
+
+export {renderSimilarOffers};
 

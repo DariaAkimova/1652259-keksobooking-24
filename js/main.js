@@ -20,7 +20,7 @@ const showAlert = (message) => {
 
 
 getData (
-  (offers) => {renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT));},
+  (offers) => renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT)),
   () =>   showAlert('Ошибка загрузки данных'),
 );
 

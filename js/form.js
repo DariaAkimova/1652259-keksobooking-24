@@ -5,6 +5,7 @@ const titleInput = document.querySelector('#title');
 const priceInput = document.querySelector('#price');
 const roomsList  = document.querySelector('#room_number');
 const capacityList  = document.querySelector('#capacity');
+const capacityOptions = capacityList.querySelectorAll('option');
 const guests = capacityList.querySelectorAll('option');
 const infoForm = document.querySelector('.ad-form');
 const formFieldsets = infoForm.querySelectorAll('fieldset');
@@ -15,7 +16,7 @@ const makeAllDisabled = () => {
   infoForm.classList.add('ad-form--disabled');
   formFieldsets.forEach((fieldset)=> fieldset.setAttribute('disabled','true'));
   mapFiltersForm.classList.add('ad-form--disabled');
-  allFilters.forEach((input)=> input.setAttribute('disabled','true'));
+  allFilters.forEach((filter)=> filter.setAttribute('disabled','true'));
 };
 
 makeAllDisabled();
@@ -24,7 +25,7 @@ const makeAllAktive = () => {
   infoForm.classList.remove('ad-form--disabled');
   formFieldsets.forEach((fieldset)=> fieldset.removeAttribute('disabled'));
   mapFiltersForm.classList.remove('ad-form--disabled');
-  allFilters.forEach((fieldset)=> fieldset.removeAttribute('disabled'));
+  allFilters.forEach((filter)=> filter.removeAttribute('disabled'));
 };
 
 titleInput.addEventListener('input', ()=> {
@@ -53,12 +54,20 @@ priceInput.addEventListener('input', () => {
 const makeDisabled = (element, condition) =>  {
   if (condition){
     element.classList.add('hidden');
+    capacityOptions.forEach ((option) => {
+      if (option.value !== roomsList.value) {
+        option.removeAttribute('selected');
+      } else if (option.value === roomsList.value || (roomsList.value === '100' && option.value === '0')) {
+        option.setAttribute('selected', 'true');
+      }
+    });
   } else {
     element.classList.remove('hidden');
+
   }
 };
 const getRoomGuestsRelation = () => {
-  capacityList.value = '';
+
   switch (roomsList.value)
   {
     case '1':

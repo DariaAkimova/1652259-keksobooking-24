@@ -1035,7 +1035,8 @@ fieldset {
    .alert-message {
   z-index: 1000;
   position: absolute;
-  left: 35%;
+  width: 40%;
+  left: 30%;
   top: 100px;
   padding: 10px 3px;
   font-size: 30px;
