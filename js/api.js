@@ -1,14 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { renderSimilarOffers } from './generate-elements.js';
-import {mainMarker} from './map.js';
+//import { renderSimilarOffers } from './generate-elements.js';
+import {DEFAULT_MARKER, mainMarker} from './map.js';
 
-const form = document.querySelector ('.ad-form');
-const allSelectForms = form.querySelectorAll ('select');
-const allInputForms = form.querySelectorAll ('input');
-const addressInput = form.querySelector('#address');
-const filtersArea = document.querySelector('.map__filters');
-const selectFilters = filtersArea.querySelectorAll('select');
-const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
+const offerForm = document.querySelector ('.ad-form');
+const allForms = document.querySelectorAll('form');
+// const allSelectForms = offerForm.querySelectorAll ('select');
+// const allInputForms = offerForm.querySelectorAll ('input');
+// const addressInput = offerForm.querySelector('#address');
+//const filtersArea = document.querySelector('.map__filters');
+// const selectFilters = filtersArea.querySelectorAll('select');
+// const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
 const resetButton = document.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success');
 const successMessage = successMessageTemplate.cloneNode(true);
@@ -27,11 +28,11 @@ const getData = (onSuccess, onFail) => {
     })
     .then((offers) => {
       //console.error (renderSimilarOffers(offers.slice(0, 10)));
-      console.log(renderSimilarOffers(offers.slice(0, 10)));
-      //onSuccess (offers);
+      // console.log(renderSimilarOffers(offers.slice(0, 10)));
+      onSuccess (offers);
     })
     .catch ((err) => {
-      console.error(err);
+     // console.error(err);
       onFail(err);
     });
 };
@@ -50,7 +51,6 @@ const sendData = (onSuccess, onFail,  body) => {
       throw new Error();
     }
   })
-  // .then(showSuccesMessage)
     .catch ((err) => {
       // eslint-disable-next-line no-console
       //console.error(err);
@@ -59,17 +59,8 @@ const sendData = (onSuccess, onFail,  body) => {
 
 };
 const clearAll = () => {
-  allInputForms.forEach((input) => input.value = '');
-  addressInput.value = '35.68950, 139.69171';
-  //   allSelectForms.forEach((select) => {
-  //  Как вернуть селекты в изначальное состояние  состояние?
-  // })
-  selectFilters.forEach ((filter) => filter.value = 'any');
-  checkboxFilters.forEach((filter) => filter.removeAttribute('checked'));
-  mainMarker.setLatLng({
-    lat: 35.68950,
-    lng: 139.69200,
-  });
+  allForms.forEach((form) => form.reset());
+  mainMarker.setLatLng(DEFAULT_MARKER);
 };
 
 const closeMessage = (typeOfMessage) => {
@@ -78,45 +69,43 @@ const closeMessage = (typeOfMessage) => {
 
 const showErrorMessage = () => {
   document.body.append(errorMessage);
-
   closeErrorButton.addEventListener('click', closeMessage (errorMessage));
-  document.addEventListener('click', () => closeMessage (errorMessage));
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      closeMessage (errorMessage);
-    }
-  });
 };
 
 const setOfferFormSubmit = (onSuccess) => {
 
-  form.addEventListener('submit', (evt) => {
+  offerForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData (
-      () => onSuccess,
-      () => showErrorMessage,
+      onSuccess,
+      showErrorMessage,
       () => new FormData(evt.target),
     );
   });
 };
 
 
-const showSuccesMessage = (clearFunction) => {
+const showSuccesMessage = () => {
   document.body.append(successMessage);
-
-  document.addEventListener('click', () => closeMessage (successMessage));
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      closeMessage (successMessage);
-    }
-  });
-  clearFunction();
+  clearAll();
 };
 
 setOfferFormSubmit(showSuccesMessage);
+
+
+
+document.addEventListener('click', () => {
+  closeMessage (errorMessage);
+  closeMessage (successMessage);
+});
+document.addEventListener('keydown', (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    closeMessage (errorMessage);
+    closeMessage (successMessage);
+  }
+});
 
 resetButton.addEventListener('click', clearAll);
 

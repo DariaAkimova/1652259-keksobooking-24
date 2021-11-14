@@ -1,6 +1,3 @@
-//import {similarOffers} from './data.js';
-
-//const mapCanvas = document.querySelector('#map-canvas');
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 

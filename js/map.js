@@ -4,12 +4,14 @@
 import { makeAllAktive } from './form.js';
 import './main.js';
 
+const DEFAULT_MARKER = {
+  lat: 35.68950,
+  lng: 139.69171,
+};
+
 const map = L.map('map-canvas')
   .on ('load', makeAllAktive)
-  .setView({
-    lat: 35.68950,
-    lng: 139.69171,
-  }, 10);
+  .setView(DEFAULT_MARKER, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -25,10 +27,7 @@ const mainPinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 const mainMarker = L.marker(
-  {
-    lat: 35.6895,
-    lng: 139.692,
-  },
+  DEFAULT_MARKER,
   {
     draggable:true,
     icon: mainPinIcon,
@@ -70,4 +69,4 @@ const renderMarkers = (offersArray, arrayForPopup ) => {
       .bindPopup(arrayForPopup[idx]);
   });
 };
-export {mainMarker, renderMarkers};
+export {DEFAULT_MARKER, mainMarker, renderMarkers};

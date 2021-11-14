@@ -2,7 +2,7 @@ import './form.js';
 import './map.js';
 import {getData} from './api.js';
 import {renderSimilarOffers} from './generate-elements.js';
-//import { renderMarkers } from './map.js';
+import { renderMarkers } from './map.js';
 
 const MAX_OFFERS_COUNT = 10;
 const ALERT_SHOW_TIME = 100000;
@@ -20,12 +20,10 @@ const showAlert = (message) => {
 
 
 getData (
-  (offers) => renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT)),
+  (offers) => {
+    renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT))
+    const popupOffers = renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT));
+    renderMarkers(offers, popupOffers);
+  },
   () =>   showAlert('Ошибка загрузки данных'),
 );
-
-//   {
-//     const popupOffers = renderSimilarOffers(offers.slice(0, MAX_OFFERS_COUNT));
-//     console.log (popupOffers)
-//     renderMarkers(offers, popupOffers);
-//   },
