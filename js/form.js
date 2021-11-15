@@ -6,7 +6,6 @@ const priceInput = document.querySelector('#price');
 const roomsList  = document.querySelector('#room_number');
 const capacityList  = document.querySelector('#capacity');
 const capacityOptions = capacityList.querySelectorAll('option');
-const guests = capacityList.querySelectorAll('option');
 const infoForm = document.querySelector('.ad-form');
 const formFieldsets = infoForm.querySelectorAll('fieldset');
 const mapFiltersForm = document.querySelector('.map__filters');
@@ -71,23 +70,22 @@ const getRoomGuestsRelation = () => {
   switch (roomsList.value)
   {
     case '1':
-      guests.forEach((guestsItem)=> makeDisabled (guestsItem, guestsItem.value !=='1'));
+      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='1'));
       break;
     case '2':
-      guests.forEach((guestsItem)=> makeDisabled (guestsItem, guestsItem.value !=='1' && guestsItem.value !=='2'));
+      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='1' && capacityOption.value !=='2'));
 
       break;
     case '3':
-      guests.forEach((guestsItem)=> makeDisabled (guestsItem, guestsItem.value ==='0'));
+      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value ==='0'));
 
       break;
     case '100':
-      guests.forEach((guestsItem)=> makeDisabled (guestsItem, guestsItem.value !=='0'));
+      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='0'));
   }
 
 };
 
 roomsList.addEventListener('change', getRoomGuestsRelation);
-
 
 export {makeAllAktive};

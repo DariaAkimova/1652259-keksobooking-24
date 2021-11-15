@@ -1,23 +1,18 @@
 import {DEFAULT_MARKER, mainMarker} from './map.js';
 
-const serverLink = 'https://24.javascript.pages.academy/keksobooking';
+const SERVER_LINK = 'https://24.javascript.pages.academy/keksobooking';
 const offerForm = document.querySelector ('.ad-form');
 const allForms = document.querySelectorAll('form');
-// const allSelectForms = offerForm.querySelectorAll ('select');
-// const allInputForms = offerForm.querySelectorAll ('input');
-// const addressInput = offerForm.querySelector('#address');
-//const filtersArea = document.querySelector('.map__filters');
-// const selectFilters = filtersArea.querySelectorAll('select');
-// const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
-//const resetButton = document.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success');
-const successMessage = successMessageTemplate.cloneNode(true).content;
+const successMessageFragment = successMessageTemplate.cloneNode(true).content;
+const successMessage = successMessageFragment.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error');
-const errorMessage = errorMessageTemplate.cloneNode(true).content;
-const closeErrorButton = errorMessage.querySelector('.error__button');
+const errorMessageFragment = errorMessageTemplate.cloneNode(true).content;
+const errorMessage = errorMessageFragment.querySelector('.error');
+const errorButton = errorMessage.querySelector('.error__button');
 
 const getData = (onSuccess, onFail) => {
-  fetch (`${serverLink}/data`)
+  fetch (`${SERVER_LINK}/data`)
     .then((response)  => {
       if (response.ok) {
         return response.json();
@@ -35,7 +30,7 @@ const getData = (onSuccess, onFail) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    serverLink,
+    SERVER_LINK,
     {
       method: 'POST',
       body,
@@ -57,14 +52,30 @@ const clearAll = () => {
   mainMarker.setLatLng(DEFAULT_MARKER);
 };
 
-const closeMessage = (typeOfMessage) => {
-  //typeOfMessage.classList.add('hidden');
-  document.body.removeChild(typeOfMessage);
+const closeMessage = (messageElement) => {
+  messageElement.remove();
+};
+
+const onMessageClick = (openedMessage) => {
+  document.addEventListener('click', () => {
+    closeMessage(openedMessage);
+  });
+};
+
+const onDocumentEscKeydown = (openedMessage) => {
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closeMessage(openedMessage);
+    }
+  });
 };
 
 const showErrorMessage = () => {
   document.body.appendChild(errorMessage);
-  closeErrorButton.addEventListener('click', () => closeMessage(errorMessage));
+  errorButton.addEventListener('click', () => closeMessage(errorMessage));
+  onMessageClick (errorMessage);
+  onDocumentEscKeydown (errorMessage);
 };
 
 const setOfferFormSubmit = (onSuccess) => {
@@ -81,24 +92,13 @@ const setOfferFormSubmit = (onSuccess) => {
 };
 
 const showSuccesMessage = () => {
-  document.body.appendChild(successMessage);
   clearAll();
+  document.body.appendChild(successMessage);
+  onMessageClick (successMessage);
+  onDocumentEscKeydown (successMessage);
 };
 
 setOfferFormSubmit(showSuccesMessage);
 
-document.addEventListener('click', () => {
-  closeMessage(errorMessage);
-  closeMessage(successMessage);
-});
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    closeMessage(errorMessage);
-    closeMessage(successMessage);
-  }
-});
-
-//resetButton.addEventListener('click', clearAll);
 
 export {getData};

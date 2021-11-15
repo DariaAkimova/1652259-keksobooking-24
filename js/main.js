@@ -1,7 +1,7 @@
 import './form.js';
 import './map.js';
 import {getData} from './api.js';
-import {renderSimilarOffers} from './generate-elements.js';
+import {renderOffersList} from './generate-elements.js';
 import { renderMarkers } from './map.js';
 
 const MAX_OFFERS_COUNT = 10;
@@ -22,7 +22,7 @@ const showAlert = (message) => {
 getData (
   (offers) => {
     const offersForMap = offers.slice(0, MAX_OFFERS_COUNT);
-    const popupOffers = renderSimilarOffers(offersForMap);
+    const popupOffers = renderOffersList(offers);
     renderMarkers(offersForMap, popupOffers);
   },
   () =>   showAlert('Ошибка загрузки данных'),

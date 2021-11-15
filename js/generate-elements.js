@@ -1,10 +1,9 @@
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 
-const renderSimilarOffers = (similarOffers) => {
+const renderOffersList = (allOffers) => {
 
-  similarOffers.forEach(( dataForCard) => {
-
+  allOffers.forEach(( dataForCard) => {
 
     const similarCards = cardTemplate.cloneNode(true);
 
@@ -27,6 +26,7 @@ const renderSimilarOffers = (similarOffers) => {
     if(!dataForCard.offer.title) {
       hideField (offerTitle);
     }
+
     offerAddress.textContent = dataForCard.offer.address;
     if(!dataForCard.offer.address) {
       hideField (offerAddress);
@@ -59,7 +59,6 @@ const renderSimilarOffers = (similarOffers) => {
           offerType.textContent = 'Отель';
           break;
       }
-
     }
 
 
@@ -102,11 +101,11 @@ const renderSimilarOffers = (similarOffers) => {
     if(!dataForCard.offer.photos) {
       hideField (offerPhotosList);
     } else {
-      for (const  photo of dataForCard.offer.photos) {
+      dataForCard.offer.photos.forEach((photo) => {
         const newPhoto = onePhoto.cloneNode();
         newPhoto.src = photo;
         offerPhotosList.appendChild(newPhoto);
-      }
+      });
       onePhoto.classList.add('hidden');
     }
 
@@ -119,10 +118,10 @@ const renderSimilarOffers = (similarOffers) => {
 
     offerCardFragment.appendChild(similarCards);
   });
+
   return [...offerCardFragment.children];
 
 };
 
-
-export {renderSimilarOffers};
+export {renderOffersList};
 
