@@ -1,11 +1,15 @@
 import './form.js';
 import './map.js';
 import {getData} from './api.js';
-import {renderOffersList} from './generate-elements.js';
+import {getFilteredOffers, renderOffersList} from './generate-elements.js';
 import { renderMarkers } from './map.js';
 
-const MAX_OFFERS_COUNT = 10;
-const ALERT_SHOW_TIME = 100000;
+
+const ALERT_SHOW_TIME = 5000;
+
+const filtersArea = document.querySelector('.map__filters');
+const selectFilters = filtersArea.querySelectorAll('select');
+const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
 
 const showAlert = (message) => {
   const alertMessage = document.createElement('div');
@@ -19,11 +23,24 @@ const showAlert = (message) => {
 };
 
 
-getData (
-  (offers) => {
-    const offersForMap = offers.slice(0, MAX_OFFERS_COUNT);
-    const popupOffers = renderOffersList(offers);
+const createMarkers = () => {
+  getData ((offers) => {
+    const offersForMap = getFilteredOffers (offers);
+    const popupOffers = renderOffersList(offersForMap);
     renderMarkers(offersForMap, popupOffers);
+    //console.log (offersForMap);
   },
   () =>   showAlert('Ошибка загрузки данных'),
-);
+  );
+};
+createMarkers();
+
+selectFilters.forEach((select) => {
+  select.addEventListener('change', createMarkers);
+});
+
+checkboxFilters.forEach((checkbox) => {
+  checkbox.addEventListener('change', createMarkers);
+});
+
+

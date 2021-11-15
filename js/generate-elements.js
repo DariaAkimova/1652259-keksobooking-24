@@ -1,10 +1,18 @@
+import {compareOffers } from './filter.js';
+
+const MAX_OFFERS_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 
-const renderOffersList = (allOffers) => {
+const getFilteredOffers = (allOffers) => allOffers
+  .slice()
+  .sort(compareOffers)
+  .slice(0, MAX_OFFERS_COUNT);
 
-  allOffers.forEach(( dataForCard) => {
 
+const renderOffersList = (filteredOffers) => {
+
+  filteredOffers.forEach(( dataForCard) => {
     const similarCards = cardTemplate.cloneNode(true);
 
     const offerTitle = similarCards.querySelector('.popup__title');
@@ -123,5 +131,5 @@ const renderOffersList = (allOffers) => {
 
 };
 
-export {renderOffersList};
+export {getFilteredOffers, renderOffersList};
 
