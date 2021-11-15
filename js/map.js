@@ -1,13 +1,14 @@
-import {similarOffers} from './data.js';
-import {allOffersArray} from './generate-elements.js';
 import { makeAllAktive } from './form.js';
+import './main.js';
+
+const DEFAULT_MARKER = {
+  lat: 35.68950,
+  lng: 139.69171,
+};
 
 const map = L.map('map-canvas')
   .on ('load', makeAllAktive)
-  .setView({
-    lat: 35.68950,
-    lng: 139.69171,
-  }, 10);
+  .setView(DEFAULT_MARKER, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -23,10 +24,7 @@ const mainPinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 const mainMarker = L.marker(
-  {
-    lat: 35.6895,
-    lng: 139.692,
-  },
+  DEFAULT_MARKER,
   {
     draggable:true,
     icon: mainPinIcon,
@@ -50,19 +48,22 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
-similarOffers.forEach ((dataForCard, idx) => {
-  const offerLat = dataForCard.location.lat;
-  const offerLng = dataForCard.location.lng;
+const renderMarkers = (offersArray, arrayForPopup ) => {
+  offersArray.forEach ((dataForCard, idx) => {
+    const offerLat = dataForCard.location.lat;
+    const offerLng = dataForCard.location.lng;
 
-  const marker = L.marker({
-    lat: offerLat,
-    lng: offerLng,
-  }, {
-    icon,
-  },
-  );
+    const marker = L.marker({
+      lat: offerLat,
+      lng: offerLng,
+    }, {
+      icon,
+    },
+    );
 
-  marker
-    .addTo(map)
-    .bindPopup(allOffersArray[idx]);
-});
+    marker
+      .addTo(map)
+      .bindPopup(arrayForPopup[idx]);
+  });
+};
+export {DEFAULT_MARKER, mainMarker, renderMarkers};
