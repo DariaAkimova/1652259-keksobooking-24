@@ -1,42 +1,52 @@
+import {getFilterData } from './filter.js';
+
+const MAX_OFFERS_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
 
-const renderOffersList = (allOffers) => {
+const getFilteredOffers = (allOffers) => allOffers
+  .slice()
+  .filter (getFilterData)
+  .slice(0, MAX_OFFERS_COUNT);
 
-  allOffers.forEach(( dataForCard) => {
 
-    const similarCards = cardTemplate.cloneNode(true);
+const renderOffersList = (filteredOffers) => {
 
-    const offerTitle = similarCards.querySelector('.popup__title');
-    const offerAddress = similarCards.querySelector('.popup__text--address');
-    const offerPrice = similarCards.querySelector('.popup__text--price');
-    const offerType = similarCards.querySelector('.popup__type');
-    const offerCapacity = similarCards.querySelector('.popup__text--capacity');
-    const offerTime = similarCards.querySelector('.popup__text--time');
-    const offerFeaturesList = similarCards.querySelector('.popup__features');
-    const offerFeatures = similarCards.querySelectorAll('.popup__feature');
-    const offerDescription = similarCards.querySelector('.popup__description');
-    const offerPhotosList = similarCards.querySelector('.popup__photos');
-    const onePhoto = similarCards.querySelector('.popup__photo');
-    const offerAvatar = similarCards.querySelector('.popup__avatar');
+  filteredOffers.forEach((dataForCard) => {
+    const offerCard = cardTemplate.cloneNode(true);
+
+    const offerTitle = offerCard.querySelector('.popup__title');
+    const offerAddress = offerCard.querySelector('.popup__text--address');
+    const offerPrice = offerCard.querySelector('.popup__text--price');
+    const offerType = offerCard.querySelector('.popup__type');
+    const offerCapacity = offerCard.querySelector('.popup__text--capacity');
+    const offerTime = offerCard.querySelector('.popup__text--time');
+    const offerFeaturesList = offerCard.querySelector('.popup__features');
+    const offerFeatures = offerCard.querySelectorAll('.popup__feature');
+    const offerDescription = offerCard.querySelector('.popup__description');
+    const offerPhotosList = offerCard.querySelector('.popup__photos');
+    const onePhoto = offerCard.querySelector('.popup__photo');
+    const offerAvatar = offerCard.querySelector('.popup__avatar');
 
     const hideField = (field) => field.classList.add('hidden');
 
-    offerTitle.textContent = dataForCard.offer.title;
     if(!dataForCard.offer.title) {
       hideField (offerTitle);
+    } else {
+      offerTitle.textContent = dataForCard.offer.title;
     }
 
-    offerAddress.textContent = dataForCard.offer.address;
     if(!dataForCard.offer.address) {
       hideField (offerAddress);
+    } else {
+      offerAddress.textContent = dataForCard.offer.address;
     }
 
-    offerPrice.textContent = `${dataForCard.offer.price} ₽/ночь`;
     if(!dataForCard.offer.price) {
       hideField (offerPrice);
+    } else {
+      offerPrice.textContent = `${dataForCard.offer.price} ₽/ночь`;
     }
-
 
     if(!dataForCard.offer.type) {
       hideField (offerType);
@@ -60,7 +70,6 @@ const renderOffersList = (allOffers) => {
           break;
       }
     }
-
 
     if(!dataForCard.offer.rooms && !dataForCard.offer.guests) {
       hideField (offerCapacity);
@@ -93,9 +102,10 @@ const renderOffersList = (allOffers) => {
       });
     }
 
-    offerDescription.textContent = dataForCard.offer.description;
     if(!dataForCard.offer.description) {
       hideField (offerDescription);
+    } else {
+      offerDescription.textContent = dataForCard.offer.description;
     }
 
     if(!dataForCard.offer.photos) {
@@ -109,19 +119,18 @@ const renderOffersList = (allOffers) => {
       onePhoto.classList.add('hidden');
     }
 
-
     if(!dataForCard.author) {
       hideField (offerAvatar);
     } else {
       offerAvatar.src = dataForCard.author.avatar;
     }
 
-    offerCardFragment.appendChild(similarCards);
+    offerCardFragment.appendChild(offerCard);
   });
 
   return [...offerCardFragment.children];
 
 };
 
-export {renderOffersList};
+export {getFilteredOffers, renderOffersList};
 

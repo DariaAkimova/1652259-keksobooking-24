@@ -1,29 +1,35 @@
-import './form.js';
+import './validation.js';
 import './map.js';
 import {getData} from './api.js';
-import {renderOffersList} from './generate-elements.js';
-import { renderMarkers } from './map.js';
+import {getFilteredOffers, renderOffersList} from './generate-elements.js';
+import {renderMarkers, removeMarkers } from './map.js';
+import {allFiltersAreas} from './filter.js';
+import {debounce, showAlert} from './util.js';
 
-const MAX_OFFERS_COUNT = 10;
-const ALERT_SHOW_TIME = 100000;
+const RERENDER_DELAY = 500;
+const ALERT_SHOW_TIME = 10000;
 
-const showAlert = (message) => {
-  const alertMessage = document.createElement('div');
-  alertMessage.classList.add('alert-message');
-  alertMessage.textContent = message;
-  document.body.append(alertMessage);
-
-  setTimeout(() => {
-    alertMessage.remove();
-  }, ALERT_SHOW_TIME);
-};
-
-
-getData (
-  (offers) => {
-    const offersForMap = offers.slice(0, MAX_OFFERS_COUNT);
-    const popupOffers = renderOffersList(offers);
+let popupOffers;
+const createMarkers = () => {
+  getData ((offers) => {
+    const offersForMap = getFilteredOffers (offers);
+    popupOffers = renderOffersList(offersForMap);
     renderMarkers(offersForMap, popupOffers);
   },
-  () =>   showAlert('Ошибка загрузки данных'),
-);
+  () =>   showAlert('Ошибка загрузки данных', ALERT_SHOW_TIME),
+  );
+};
+
+createMarkers();
+
+const changeMarkers = () => {
+  popupOffers.forEach((popup) => popup.remove());
+  removeMarkers();
+  createMarkers();
+};
+
+allFiltersAreas.forEach((filterForOffer) => {
+  filterForOffer.addEventListener('change', debounce (changeMarkers, RERENDER_DELAY));
+});
+
+

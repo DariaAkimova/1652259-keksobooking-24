@@ -1,4 +1,4 @@
-import { makeAllAktive } from './form.js';
+import { makeAllAktive } from './form-actions.js';
 import './main.js';
 
 const DEFAULT_MARKER = {
@@ -48,6 +48,8 @@ const icon = L.icon({
   iconAnchor: [20, 40],
 });
 
+const markerGroup = L.layerGroup().addTo(map);
+
 const renderMarkers = (offersArray, arrayForPopup ) => {
   offersArray.forEach ((dataForCard, idx) => {
     const offerLat = dataForCard.location.lat;
@@ -62,8 +64,11 @@ const renderMarkers = (offersArray, arrayForPopup ) => {
     );
 
     marker
-      .addTo(map)
+      .addTo(markerGroup)
       .bindPopup(arrayForPopup[idx]);
   });
 };
-export {DEFAULT_MARKER, mainMarker, renderMarkers};
+
+const removeMarkers = () => markerGroup.clearLayers();
+
+export {DEFAULT_MARKER, mainMarker, renderMarkers, removeMarkers};
