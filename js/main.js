@@ -3,7 +3,7 @@ import './map.js';
 import {getData} from './api.js';
 import {getFilteredOffers, renderOffersList} from './generate-elements.js';
 import {renderMarkers, removeMarkers } from './map.js';
-import {updateMarkers, allFiltersAreas} from './filter.js';
+import {allFiltersAreas} from './filter.js';
 import {debounce, showAlert} from './util.js';
 
 const RERENDER_DELAY = 500;
@@ -28,10 +28,8 @@ const changeMarkers = () => {
   createMarkers();
 };
 
-updateMarkers (changeMarkers);
-
 allFiltersAreas.forEach((filterForOffer) => {
-  filterForOffer.addEventListener('change', debounce (updateMarkers, RERENDER_DELAY));
+  filterForOffer.addEventListener('change', debounce (changeMarkers, RERENDER_DELAY));
 });
 
 

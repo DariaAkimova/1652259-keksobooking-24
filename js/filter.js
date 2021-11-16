@@ -73,44 +73,4 @@ const getFilterData = (someOffer)=> {
   return isValidFeatures && isValidPrice && isValidGuests && isValidRooms && isValidType;
 };
 
-// Sort
-
-const getOfferRank = (offerForFilter) => {
-  const filterPriceResult = filterPrice (offerForFilter);
-  const filterFeaturesResult = filterFeatures (offerForFilter);
-  let rank = 0;
-  if (offerForFilter.offer.type === typeFilter.value || typeFilter.value === 'any') {
-    return rank+=1;
-  }
-  if (offerForFilter.offer.rooms === +roomsFilter.value || (offerForFilter.offer.rooms > 3 && roomsFilter.value === 'more') || roomsFilter.value === 'any') {
-    return rank+=1;
-  }
-  if (offerForFilter.offer.guests === +guestsFilter.value || (offerForFilter.offer.guests > 2 && guestsFilter.value === 'more') || guestsFilter.value === 'any') {
-    return rank+=1;
-  }
-  if (filterPriceResult === true) {
-    return rank+=1;
-  }
-  if (filterFeaturesResult === true) {
-    const offerFeaturesArray = [...offerForFilter.offer.features];
-    return rank+=offerFeaturesArray.length;
-  }
-  return rank;
-};
-
-const compareOffers = (offerA, offerB) => {
-  const rankA = getOfferRank(offerA);
-  const rankB = getOfferRank(offerB);
-
-  return rankB - rankA;
-};
-
-const updateMarkers = (updateFunction) => {
-  selectFilters.forEach((select) => {
-    select.addEventListener('change', updateFunction);
-  });
-  checkboxFilters.forEach((checkbox) => {
-    checkbox.addEventListener('change', updateFunction);
-  });
-};
-export {getFilterData, compareOffers, updateMarkers, allFiltersAreas};
+export {getFilterData, allFiltersAreas};

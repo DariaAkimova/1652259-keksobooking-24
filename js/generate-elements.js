@@ -1,4 +1,4 @@
-import {/*compareOffers,*/ getFilterData } from './filter.js';
+import {getFilterData } from './filter.js';
 
 const MAX_OFFERS_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content;
@@ -6,7 +6,6 @@ const offerCardFragment = document.createDocumentFragment();
 
 const getFilteredOffers = (allOffers) => allOffers
   .slice()
-  //.sort(compareOffers)
   .filter (getFilterData)
   .slice(0, MAX_OFFERS_COUNT);
 
