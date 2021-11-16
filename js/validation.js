@@ -33,7 +33,7 @@ priceInput.addEventListener('input', () => {
   priceInput.reportValidity();
 });
 
-const makeDisabled = (element, condition) =>  {
+const hideOption = (element, condition) =>  {
   if (condition){
     element.classList.add('hidden');
     capacityOptions.forEach ((option) => {
@@ -53,18 +53,18 @@ const getRoomGuestsRelation = () => {
   switch (roomsList.value)
   {
     case '1':
-      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='1'));
+      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='1'));
       break;
     case '2':
-      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='1' && capacityOption.value !=='2'));
+      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='1' && capacityOption.value !=='2'));
 
       break;
     case '3':
-      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value ==='0'));
+      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value ==='0'));
 
       break;
     case '100':
-      capacityOptions.forEach((capacityOption)=> makeDisabled (capacityOption, capacityOption.value !=='0'));
+      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='0'));
   }
 
 };
