@@ -11,11 +11,19 @@ const featuresFilter = document.querySelector('#housing-features');
 const filterFeatures = (offerWithFeature) => {
   const checkedFeatures = [...featuresFilter.querySelectorAll(':checked')];
   const offerFeatures = offerWithFeature.offer.features;
+  if (!checkedFeatures)  {
+    return true;
+  }
   return checkedFeatures.every((checkedFeature) => offerFeatures && offerFeatures.includes(checkedFeature.value));
 };
 
 const filterPrice =(offerWithPrice) => {
   const offerPrice = offerWithPrice.offer.price;
+  if (!offerPrice && priceFilter.value !== 'any') {
+    return false;
+  } else if (!offerPrice && priceFilter.value === 'any') {
+    return true;
+  }
   switch (priceFilter.value) {
     case 'low':
       if (offerPrice < 10000) {
@@ -39,11 +47,28 @@ const filterPrice =(offerWithPrice) => {
 
 
 const getFilterData = (someOffer)=> {
+  const offerType = someOffer.offer.type;
+  const offerRooms = someOffer.offer.rooms;
+  const offerGuests = someOffer.offer.guests;
   const isValidFeatures = filterFeatures(someOffer);
   const isValidPrice = filterPrice (someOffer);
-  const isValidType = (someOffer.offer.type === typeFilter.value || typeFilter.value === 'any');
-  const isValidRooms = (someOffer.offer.rooms === +roomsFilter.value || (someOffer.offer.rooms > 3 && roomsFilter.value === 'more') || roomsFilter.value === 'any');
-  const isValidGuests = (someOffer.offer.guests === +guestsFilter.value || (someOffer.offer.guests > 2 && guestsFilter.value === 'more') || guestsFilter.value === 'any');
+
+  const isValidType =
+  ((!offerType &&  typeFilter.value === 'any') ||
+  typeFilter.value === 'any' ||
+  offerType === typeFilter.value );
+
+  const isValidRooms =
+  ((!offerRooms && roomsFilter.value === 'any') ||
+  roomsFilter.value === 'any' ||
+  offerRooms === +roomsFilter.value ||
+  (someOffer.offer.rooms > 3 && roomsFilter.value === 'more'));
+
+  const isValidGuests =
+  ((!offerGuests && guestsFilter.value === 'any') ||
+  guestsFilter.value === 'any' ||
+  (offerGuests === +guestsFilter.value) ||
+  (offerGuests > 2 && guestsFilter.value === 'more'));
 
   return isValidFeatures && isValidPrice && isValidGuests && isValidRooms && isValidType;
 };
