@@ -4,34 +4,13 @@ const MAX_PRICE = 1000000;
 
 
 const titleInput = document.querySelector('#title');
+const typeForm = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
 const roomsList  = document.querySelector('#room_number');
 const capacityList  = document.querySelector('#capacity');
 const capacityOptions = capacityList.querySelectorAll('option');
-
-
-titleInput.addEventListener('input', ()=> {
-  const titleLength = titleInput.value.length;
-
-  if (titleLength < MIN_TITLE_LENGTH) {
-    titleInput.setCustomValidity(`Необхоимо ввести еще ${MIN_TITLE_LENGTH - titleLength} символов`);
-  }  else if (titleLength > MAX_TITLE_LENGTH) {
-    titleInput.setCustomValidity(`Удалите лишние ${titleLength - MAX_TITLE_LENGTH} символов`);
-  }  else {
-    titleInput.setCustomValidity('');
-  }
-  titleInput.reportValidity();
-});
-
-priceInput.addEventListener('input', () => {
-  const price = priceInput.value;
-  if (price > MAX_PRICE) {
-    priceInput.setCustomValidity (`Цена за ночь не может превышать ${MAX_PRICE} ₽/ночь`);
-  } else {
-    priceInput.setCustomValidity('');
-  }
-  priceInput.reportValidity();
-});
+const timeIn = document.querySelector ('#timein');
+const timeOut = document.querySelector ('#timeout');
 
 const hideOption = (element, condition) =>  {
   if (condition){
@@ -45,11 +24,10 @@ const hideOption = (element, condition) =>  {
     });
   } else {
     element.classList.remove('hidden');
-
   }
 };
-const getRoomGuestsRelation = () => {
 
+const getRoomGuestsRelation = () => {
   switch (roomsList.value)
   {
     case '1':
@@ -69,6 +47,66 @@ const getRoomGuestsRelation = () => {
 
 };
 
+const changeMinPriceByType = () => {
+  let minValue;
+  switch (typeForm.value)  {
+    case 'bungalow':
+      minValue = '0';
+      break;
+    case 'flat':
+      minValue = '1000';
+      break;
+    case 'hotel':
+      minValue = '3000';
+      break;
+    case 'house':
+      minValue = '5000';
+      break;
+    case 'palace':
+      minValue = '10000';
+      break;
+  }
+  priceInput.placeholder = minValue;
+  priceInput.min = minValue;
+};
+
+const changeTimeIn = () => timeIn.value = timeOut.value;
+
+const changeTimeOut = () => timeOut.value = timeIn.value;
+
+titleInput.addEventListener('input', ()=> {
+  const titleLength = titleInput.value.length;
+  if (titleLength < MIN_TITLE_LENGTH) {
+    titleInput.setCustomValidity(`Необхоимо ввести еще ${MIN_TITLE_LENGTH - titleLength} символов`);
+  }  else if (titleLength > MAX_TITLE_LENGTH) {
+    titleInput.setCustomValidity(`Удалите лишние ${titleLength - MAX_TITLE_LENGTH} символов`);
+  }  else {
+    titleInput.setCustomValidity('');
+  }
+  titleInput.reportValidity();
+});
+
+typeForm.addEventListener('change', changeMinPriceByType);
+
+priceInput.addEventListener('input', () => {
+  const price = priceInput.value;
+  if (price > MAX_PRICE) {
+    priceInput.setCustomValidity (`Цена за ночь не может превышать ${MAX_PRICE} ₽/ночь`);
+  } else if (typeForm.value === 'flat' && price < 1000) {
+    priceInput.setCustomValidity ('Цена за ночь не может быть ниже 1000₽/ночь');
+  } else if (price < priceInput.min) {
+    priceInput.setCustomValidity (`Цена за ночь не может быть ниже ${priceInput.min}₽/ночь`);
+  }  else {
+    priceInput.setCustomValidity('');
+  }
+  priceInput.reportValidity();
+});
+
+
 roomsList.addEventListener('change', getRoomGuestsRelation);
+
+timeOut.addEventListener('change', changeTimeIn);
+
+timeIn.addEventListener('change', changeTimeOut);
 
 
