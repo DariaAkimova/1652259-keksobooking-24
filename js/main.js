@@ -1,27 +1,13 @@
-import './form.js';
+import './validation.js';
 import './map.js';
 import {getData} from './api.js';
 import {getFilteredOffers, renderOffersList} from './generate-elements.js';
-import { renderMarkers } from './map.js';
+import { renderMarkers, removeMarkers } from './map.js';
+import {updateMarkers/*, allFiltersAreas*/} from './filter.js';
+import {/*debounce,*/ showAlert} from './utils/util.js';
 
-
+//const RERENDER_DELAY = 500;
 const ALERT_SHOW_TIME = 5000;
-
-const filtersArea = document.querySelector('.map__filters');
-const selectFilters = filtersArea.querySelectorAll('select');
-const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
-
-const showAlert = (message) => {
-  const alertMessage = document.createElement('div');
-  alertMessage.classList.add('alert-message');
-  alertMessage.textContent = message;
-  document.body.append(alertMessage);
-
-  setTimeout(() => {
-    alertMessage.remove();
-  }, ALERT_SHOW_TIME);
-};
-
 
 const createMarkers = () => {
   getData ((offers) => {
@@ -30,17 +16,23 @@ const createMarkers = () => {
     renderMarkers(offersForMap, popupOffers);
     //console.log (offersForMap);
   },
-  () =>   showAlert('Ошибка загрузки данных'),
+  () =>   showAlert('Ошибка загрузки данных', ALERT_SHOW_TIME),
   );
 };
+
 createMarkers();
 
-selectFilters.forEach((select) => {
-  select.addEventListener('change', createMarkers);
-});
+const changeMarkers = () => {
+  removeMarkers();
+  createMarkers();
+};
 
-checkboxFilters.forEach((checkbox) => {
-  checkbox.addEventListener('change', createMarkers);
-});
+updateMarkers (changeMarkers);
+
+//устранение дребезга
+
+// allFiltersAreas.forEach((filterForOffer) => {
+//   filterForOffer.addEventListener('change', debounce ( changeMarkers, RERENDER_DELAY));
+// });
 
 

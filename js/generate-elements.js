@@ -1,4 +1,4 @@
-import {compareOffers } from './filter.js';
+import {/*compareOffers,*/ getFilterData } from './filter.js';
 
 const MAX_OFFERS_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content;
@@ -6,7 +6,8 @@ const offerCardFragment = document.createDocumentFragment();
 
 const getFilteredOffers = (allOffers) => allOffers
   .slice()
-  .sort(compareOffers)
+  //.sort(compareOffers)
+  .filter (getFilterData)
   .slice(0, MAX_OFFERS_COUNT);
 
 
@@ -30,21 +31,23 @@ const renderOffersList = (filteredOffers) => {
 
     const hideField = (field) => field.classList.add('hidden');
 
-    offerTitle.textContent = dataForCard.offer.title;
     if(!dataForCard.offer.title) {
       hideField (offerTitle);
+    } else {
+      offerTitle.textContent = dataForCard.offer.title;
     }
 
-    offerAddress.textContent = dataForCard.offer.address;
     if(!dataForCard.offer.address) {
       hideField (offerAddress);
+    } else {
+      offerAddress.textContent = dataForCard.offer.address;
     }
 
-    offerPrice.textContent = `${dataForCard.offer.price} ₽/ночь`;
     if(!dataForCard.offer.price) {
       hideField (offerPrice);
+    } else {
+      offerPrice.textContent = `${dataForCard.offer.price} ₽/ночь`;
     }
-
 
     if(!dataForCard.offer.type) {
       hideField (offerType);
@@ -68,7 +71,6 @@ const renderOffersList = (filteredOffers) => {
           break;
       }
     }
-
 
     if(!dataForCard.offer.rooms && !dataForCard.offer.guests) {
       hideField (offerCapacity);
@@ -101,9 +103,10 @@ const renderOffersList = (filteredOffers) => {
       });
     }
 
-    offerDescription.textContent = dataForCard.offer.description;
     if(!dataForCard.offer.description) {
       hideField (offerDescription);
+    } else {
+      offerDescription.textContent = dataForCard.offer.description;
     }
 
     if(!dataForCard.offer.photos) {
@@ -116,7 +119,6 @@ const renderOffersList = (filteredOffers) => {
       });
       onePhoto.classList.add('hidden');
     }
-
 
     if(!dataForCard.author) {
       hideField (offerAvatar);

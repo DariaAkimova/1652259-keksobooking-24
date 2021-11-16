@@ -1,3 +1,7 @@
+const filtersArea = document.querySelector('.map__filters');
+const selectFilters = filtersArea.querySelectorAll('select');
+const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
+const allFiltersAreas = [...selectFilters, ...checkboxFilters];
 const typeFilter = document.querySelector('#housing-type');
 const priceFilter = document.querySelector('#housing-price');
 const roomsFilter = document.querySelector('#housing-rooms');
@@ -38,35 +42,32 @@ const getFilterData = (someOffer)=> {
   const isValidFeatures = filterFeatures(someOffer);
   const isValidPrice = filterPrice (someOffer);
   const isValidType = (someOffer.offer.type === typeFilter.value || typeFilter.value === 'any');
-  const isValidRooms = (someOffer.offer.rooms === roomsFilter.value || roomsFilter.value === 'any');
-  const isValidGuests = (someOffer.offer.guests === guestsFilter.value || guestsFilter.value === 'any');
-
+  const isValidRooms = (someOffer.offer.rooms === +roomsFilter.value || (someOffer.offer.rooms > 3 && roomsFilter.value === 'more') || roomsFilter.value === 'any');
+  const isValidGuests = (someOffer.offer.guests === +guestsFilter.value || (someOffer.offer.guests > 2 && guestsFilter.value === 'more') || guestsFilter.value === 'any');
 
   return isValidFeatures && isValidPrice && isValidGuests && isValidRooms && isValidType;
-
 };
-
 
 // Sort
 
-const getOfferRank = (filteredOffer) => {
-  const filterPriceResult = filterPrice (filteredOffer);
-  const filterFeaturesResult = filterFeatures (filteredOffer);
+const getOfferRank = (offerForFilter) => {
+  const filterPriceResult = filterPrice (offerForFilter);
+  const filterFeaturesResult = filterFeatures (offerForFilter);
   let rank = 0;
-  if (filteredOffer.offer.type === typeFilter.value || typeFilter.value === 'any') {
+  if (offerForFilter.offer.type === typeFilter.value || typeFilter.value === 'any') {
     return rank+=1;
   }
-  if (filteredOffer.offer.rooms === roomsFilter.value || roomsFilter.value === 'any') {
+  if (offerForFilter.offer.rooms === +roomsFilter.value || (offerForFilter.offer.rooms > 3 && roomsFilter.value === 'more') || roomsFilter.value === 'any') {
     return rank+=1;
   }
-  if (filteredOffer.offer.guests === guestsFilter.value || guestsFilter.value === 'any') {
+  if (offerForFilter.offer.guests === +guestsFilter.value || (offerForFilter.offer.guests > 2 && guestsFilter.value === 'more') || guestsFilter.value === 'any') {
     return rank+=1;
   }
-  if (filterPriceResult) {
+  if (filterPriceResult === true) {
     return rank+=1;
   }
-  if (filterFeaturesResult) {
-    const offerFeaturesArray = filteredOffer.offer.features;
+  if (filterFeaturesResult === true) {
+    const offerFeaturesArray = [...offerForFilter.offer.features];
     return rank+=offerFeaturesArray.length;
   }
   return rank;
@@ -79,21 +80,12 @@ const compareOffers = (offerA, offerB) => {
   return rankB - rankA;
 };
 
-
-//устранение дребезга
-
-//   const RERENDER_DELAY = 500;
-//  const allFiltersAreas = [...selectFilters, ...checkboxFilters];
-
-//  allFiltersAreas.forEach((filterForOffer) => {
-//     filterForOffer.addEventListener('change', => {
-//         (_.debounce (
-//             () => renderOfferList(),
-//             RERENDER_DELAY
-
-//         ))
-//     } )
-//  })
-
-
-export {getFilterData, compareOffers};
+const updateMarkers = (updateFunction) => {
+  selectFilters.forEach((select) => {
+    select.addEventListener('change', updateFunction);
+  });
+  checkboxFilters.forEach((checkbox) => {
+    checkbox.addEventListener('change', updateFunction);
+  });
+};
+export {getFilterData, compareOffers, updateMarkers, allFiltersAreas};
