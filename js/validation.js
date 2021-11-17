@@ -16,9 +16,11 @@ const hideOption = (element, condition) =>  {
   if (condition){
     element.classList.add('hidden');
     capacityOptions.forEach ((option) => {
-      if (option.value !== roomsList.value) {
+      if ((option.value !== roomsList.value) && (option.value !== '0' && roomsList.value !== '100'))
+      {
         option.removeAttribute('selected');
-      } else if (option.value === roomsList.value || (roomsList.value === '100' && option.value === '0')) {
+      } else if ((option.value === roomsList.value) || (option.value === '0' && roomsList.value === '100'))
+      {
         option.setAttribute('selected', 'true');
       }
     });
@@ -48,26 +50,27 @@ const getRoomGuestsRelation = () => {
 };
 
 const changeMinPriceByType = () => {
-  let minValue;
+  priceInput.value = '';
+  let minPriceValue;
   switch (typeForm.value)  {
     case 'bungalow':
-      minValue = '0';
+      minPriceValue = '0';
       break;
     case 'flat':
-      minValue = '1000';
+      minPriceValue = '1000';
       break;
     case 'hotel':
-      minValue = '3000';
+      minPriceValue = '3000';
       break;
     case 'house':
-      minValue = '5000';
+      minPriceValue = '5000';
       break;
     case 'palace':
-      minValue = '10000';
+      minPriceValue = '10000';
       break;
   }
-  priceInput.placeholder = minValue;
-  priceInput.min = minValue;
+  priceInput.placeholder = minPriceValue;
+  priceInput.min = minPriceValue;
 };
 
 const changeTimeIn = () => timeIn.value = timeOut.value;
@@ -96,7 +99,7 @@ priceInput.addEventListener('input', () => {
     priceInput.setCustomValidity ('Цена за ночь не может быть ниже 1000₽/ночь');
   } else if (price < priceInput.min) {
     priceInput.setCustomValidity (`Цена за ночь не может быть ниже ${priceInput.min}₽/ночь`);
-  }  else {
+  } else {
     priceInput.setCustomValidity('');
   }
   priceInput.reportValidity();
