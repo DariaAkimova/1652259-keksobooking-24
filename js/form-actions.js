@@ -30,42 +30,48 @@ const makeAllAktive = () => {
   allFilters.forEach((filter)=> filter.removeAttribute('disabled'));
 };
 
-
-const onMessageClick = (callback) => {
-  document.addEventListener('click', callback);
-};
-
-const onDocumentEscKeydown = (callback) => {
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      callback;
-    }
-  });
-};
-
-const onErrorButtonClick = (callback) => {
-  errorButton.addEventListener('click', callback);
-};
-
 const clearAll = () => {
   allForms.forEach((form) => form.reset());
   mainMarker.setLatLng(DEFAULT_MARKER);
 };
 
-const closeMessage = (messageElement) => {
+const closeMessage = (messageElement, callback) => {
   messageElement.remove();
+  callback ;
+};
+
+const onMessageClick = (messageElement, callback) => {
+  document.addEventListener('click', () => {
+    closeMessage(messageElement, callback);
+  });
+};
+
+const onDocumentEscKeydown = (messageElement, callback) => {
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closeMessage(messageElement, callback);
+    }
+  });
+};
+
+const onErrorButtonClick = (messageElement, callback) => {
+  errorButton.addEventListener('click', () => {
+    closeMessage(messageElement, callback);
+  });
+};
+
+const removeAllListeners =() => {
   document.removeEventListener('click', onMessageClick);
   document.removeEventListener('keydown', onDocumentEscKeydown);
   errorButton.removeEventListener('click', onErrorButtonClick);
 };
 
-
 const showErrorMessage = () => {
   document.body.appendChild(errorMessage);
-  onErrorButtonClick (closeMessage(errorMessage));
-  onMessageClick (closeMessage(errorMessage));
-  onDocumentEscKeydown (closeMessage(errorMessage));
+  onErrorButtonClick (errorMessage, removeAllListeners);
+  onMessageClick (errorMessage, removeAllListeners);
+  onDocumentEscKeydown (errorMessage, removeAllListeners);
 };
 
 const setOfferFormSubmit = (onSuccess) => {
@@ -84,8 +90,8 @@ const setOfferFormSubmit = (onSuccess) => {
 const showSuccesMessage = () => {
   clearAll();
   document.body.appendChild(successMessage);
-  onMessageClick (closeMessage (successMessage));
-  onDocumentEscKeydown (closeMessage (successMessage));
+  onMessageClick (successMessage, removeAllListeners);
+  onDocumentEscKeydown (successMessage, removeAllListeners);
 };
 
 setOfferFormSubmit(showSuccesMessage);
