@@ -1,8 +1,6 @@
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
-
-
 const titleInput = document.querySelector('#title');
 const typeForm = document.querySelector('#type');
 const priceInput = document.querySelector('#price');
@@ -12,42 +10,43 @@ const capacityOptions = capacityList.querySelectorAll('option');
 const timeIn = document.querySelector ('#timein');
 const timeOut = document.querySelector ('#timeout');
 
-const hideOption = (element, condition) =>  {
-  if (condition){
+
+const hideOption = (element, condition) => {
+  if (condition) {
     element.classList.add('hidden');
-    capacityOptions.forEach ((option) => {
-      if ((option.value !== roomsList.value) && (option.value !== '0' && roomsList.value !== '100'))
-      {
-        option.removeAttribute('selected');
-      } else if ((option.value === roomsList.value) || (option.value === '0' && roomsList.value === '100'))
-      {
-        option.setAttribute('selected', 'true');
-      }
-    });
   } else {
     element.classList.remove('hidden');
   }
 };
 
 const getRoomGuestsRelation = () => {
-  switch (roomsList.value)
-  {
+  switch (roomsList.value) {
     case '1':
-      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='1'));
+      capacityOptions.forEach((capacityOption) =>
+        hideOption(capacityOption, capacityOption.value !== '1'),
+      );
       break;
     case '2':
-      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='1' && capacityOption.value !=='2'));
+      capacityOptions.forEach((capacityOption) =>
+        hideOption(capacityOption, !['1', '2'].includes(capacityOption.value)),
+      );
 
       break;
     case '3':
-      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value ==='0'));
+      capacityOptions.forEach((capacityOption) =>
+        hideOption(capacityOption, capacityOptions.value === '0'),
+      );
 
       break;
     case '100':
-      capacityOptions.forEach((capacityOption)=> hideOption (capacityOption, capacityOption.value !=='0'));
+      capacityOptions.forEach((capacityOption) =>
+        hideOption(capacityOption, capacityOption.value !== '0'),
+      );
   }
 
+  capacityList.value = capacityList.querySelector('option:not(.hidden)').value;
 };
+
 
 const changeMinPriceByType = () => {
   priceInput.value = '';

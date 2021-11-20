@@ -1,8 +1,11 @@
 import { sendData } from './api.js';
 import {DEFAULT_MARKER, mainMarker} from './map.js';
+import { selectFilters, checkboxFilters } from './filter.js';
+import { changeMarkers } from './main.js';
 
 const offerForm = document.querySelector ('.ad-form');
 const allForms = document.querySelectorAll('form');
+const resetButton = document.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success');
 const successMessageFragment = successMessageTemplate.cloneNode(true).content;
 const successMessage = successMessageFragment.querySelector('.success');
@@ -13,6 +16,7 @@ const errorButton = errorMessage.querySelector('.error__button');
 const formFieldsets = offerForm.querySelectorAll('fieldset');
 const mapFiltersForm = document.querySelector('.map__filters');
 const allFilters = mapFiltersForm.querySelectorAll('select');
+
 
 const makeAllDisabled = () => {
   offerForm.classList.add('ad-form--disabled');
@@ -32,34 +36,41 @@ const makeAllAktive = () => {
 
 const clearAll = () => {
   allForms.forEach((form) => form.reset());
+  selectFilters.forEach ((filter) => filter.value = 'any');
+  checkboxFilters.forEach((filter) => filter.removeAttribute('checked'));
   mainMarker.setLatLng(DEFAULT_MARKER);
+  changeMarkers();
 };
 
-const closeMessage = (messageElement, callback) => {
-  messageElement.remove();
-  callback ;
+
+const onMessageClick = () => {
+  if (document.body.lastChild === errorMessage) {
+    closeErrorMessage();
+  } else if (document.body.lastChild === successMessage) {
+    closeSuccessMessage();
+  }
 };
 
-const onMessageClick = (messageElement, callback) => {
-  document.addEventListener('click', () => {
-    closeMessage(messageElement, callback);
-  });
-};
+const addListenerClick = () => document.addEventListener('click', onMessageClick);
 
-const onDocumentEscKeydown = (messageElement, callback) => {
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      closeMessage(messageElement, callback);
+const onDocumentEscKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    if (document.body.lastChild === errorMessage) {
+      closeErrorMessage();
+    } else if (document.body.lastChild === successMessage) {
+      closeSuccessMessage();
     }
-  });
+  }
 };
 
-const onErrorButtonClick = (messageElement, callback) => {
-  errorButton.addEventListener('click', () => {
-    closeMessage(messageElement, callback);
-  });
+const addListenerEscKeydown = () => document.addEventListener('keydown', onDocumentEscKeydown);
+
+const onErrorButtonClick = () => {
+  closeErrorMessage();
 };
+
+const addErrorButtonClickListener = () =>  errorButton.addEventListener('click', onErrorButtonClick);
 
 const removeAllListeners =() => {
   document.removeEventListener('click', onMessageClick);
@@ -67,11 +78,21 @@ const removeAllListeners =() => {
   errorButton.removeEventListener('click', onErrorButtonClick);
 };
 
+function closeErrorMessage  () {
+  errorMessage.remove();
+  removeAllListeners();
+}
+
+function closeSuccessMessage () {
+  successMessage.remove();
+  removeAllListeners();
+}
+
 const showErrorMessage = () => {
   document.body.appendChild(errorMessage);
-  onErrorButtonClick (errorMessage, removeAllListeners);
-  onMessageClick (errorMessage, removeAllListeners);
-  onDocumentEscKeydown (errorMessage, removeAllListeners);
+  addErrorButtonClickListener ();
+  addListenerClick ();
+  addListenerEscKeydown ();
 };
 
 const setOfferFormSubmit = (onSuccess) => {
@@ -90,11 +111,12 @@ const setOfferFormSubmit = (onSuccess) => {
 const showSuccesMessage = () => {
   clearAll();
   document.body.appendChild(successMessage);
-  onMessageClick (successMessage, removeAllListeners);
-  onDocumentEscKeydown (successMessage, removeAllListeners);
+  addListenerClick ();
+  addListenerEscKeydown ();
 };
 
 setOfferFormSubmit(showSuccesMessage);
 
+resetButton.addEventListener('click', clearAll);
 
-export {makeAllAktive};
+export {makeAllAktive, makeAllDisabled};

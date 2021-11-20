@@ -1,9 +1,9 @@
 import './validation.js';
 import './map.js';
 import {getData} from './api.js';
-import {getFilteredOffers, renderOffersList} from './generate-elements.js';
+import {renderOffersList} from './generate-elements.js';
 import {renderMarkers, removeMarkers } from './map.js';
-import {allFiltersAreas} from './filter.js';
+import {allFiltersAreas, getFilteredOffers} from './filter.js';
 import {debounce, showAlert} from './util.js';
 
 const RERENDER_DELAY = 500;
@@ -33,3 +33,4 @@ allFiltersAreas.forEach((filterForOffer) => {
 });
 
 
+export {changeMarkers};

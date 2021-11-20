@@ -1,3 +1,4 @@
+const MAX_OFFERS_COUNT = 10;
 const filtersArea = document.querySelector('.map__filters');
 const selectFilters = filtersArea.querySelectorAll('select');
 const checkboxFilters = filtersArea.querySelectorAll('input[type="checkbox"]');
@@ -45,32 +46,44 @@ const filterPrice =(offerWithPrice) => {
   }
 };
 
+const getFilteredOffers = (allOffers) => {
+  const filteredOffers = [];
 
-const getFilterData = (someOffer)=> {
-  const offerType = someOffer.offer.type;
-  const offerRooms = someOffer.offer.rooms;
-  const offerGuests = someOffer.offer.guests;
-  const isValidFeatures = filterFeatures(someOffer);
-  const isValidPrice = filterPrice (someOffer);
+  for (const someOffer of allOffers) {
+    const offerType = someOffer.offer.type;
+    const offerRooms = someOffer.offer.rooms;
+    const offerGuests = someOffer.offer.guests;
+    const isValidFeatures = filterFeatures(someOffer);
+    const isValidPrice = filterPrice (someOffer);
 
-  const isValidType =
-  ((!offerType &&  typeFilter.value === 'any') ||
-  typeFilter.value === 'any' ||
-  offerType === typeFilter.value );
+    const isValidType =
+    ((!offerType &&  typeFilter.value === 'any') ||
+    typeFilter.value === 'any' ||
+    offerType === typeFilter.value );
 
-  const isValidRooms =
-  ((!offerRooms && roomsFilter.value === 'any') ||
-  roomsFilter.value === 'any' ||
-  offerRooms === +roomsFilter.value ||
-  (someOffer.offer.rooms > 3 && roomsFilter.value === 'more'));
+    const isValidRooms =
+    ((!offerRooms && roomsFilter.value === 'any') ||
+    roomsFilter.value === 'any' ||
+    offerRooms === +roomsFilter.value ||
+    (someOffer.offer.rooms > 3 && roomsFilter.value === 'more'));
 
-  const isValidGuests =
-  ((!offerGuests && guestsFilter.value === 'any') ||
-  guestsFilter.value === 'any' ||
-  (offerGuests === +guestsFilter.value) ||
-  (offerGuests > 2 && guestsFilter.value === 'more'));
+    const isValidGuests =
+    ((!offerGuests && guestsFilter.value === 'any') ||
+    guestsFilter.value === 'any' ||
+    (offerGuests === +guestsFilter.value) ||
+    (offerGuests > 2 && guestsFilter.value === 'more'));
 
-  return isValidFeatures && isValidPrice && isValidGuests && isValidRooms && isValidType;
+    if (filteredOffers.length >= MAX_OFFERS_COUNT) {
+      break;
+    }
+
+    if (isValidFeatures && isValidPrice && isValidGuests && isValidRooms && isValidType) {
+      filteredOffers.push(someOffer);
+    }
+  }
+
+  return filteredOffers;
 };
 
-export {getFilterData, allFiltersAreas};
+
+export {getFilteredOffers, allFiltersAreas, selectFilters, checkboxFilters};

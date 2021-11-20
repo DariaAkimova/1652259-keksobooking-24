@@ -1,4 +1,4 @@
-import { makeAllAktive } from './form-actions.js';
+import { makeAllAktive, makeAllDisabled} from './form-actions.js';
 import './main.js';
 
 const DEFAULT_MARKER = {
@@ -8,8 +8,8 @@ const DEFAULT_MARKER = {
 
 const map = L.map('map-canvas')
   .on ('load', makeAllAktive)
-  .setView(DEFAULT_MARKER, 10);
-
+  .setView(DEFAULT_MARKER, 10)
+  .on ('unload', makeAllDisabled);
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {

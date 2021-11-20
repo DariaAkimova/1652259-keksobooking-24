@@ -1,14 +1,5 @@
-import {getFilterData } from './filter.js';
-
-const MAX_OFFERS_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content;
 const offerCardFragment = document.createDocumentFragment();
-
-const getFilteredOffers = (allOffers) => allOffers
-  .slice()
-  .filter (getFilterData)
-  .slice(0, MAX_OFFERS_COUNT);
-
 
 const renderOffersList = (filteredOffers) => {
 
@@ -132,5 +123,5 @@ const renderOffersList = (filteredOffers) => {
 
 };
 
-export {getFilteredOffers, renderOffersList};
+export {renderOffersList};
 
