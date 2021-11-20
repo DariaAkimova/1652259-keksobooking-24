@@ -1,5 +1,4 @@
 import { makeAllAktive, makeAllDisabled} from './form-actions.js';
-import './main.js';
 
 const DEFAULT_MARKER = {
   lat: 35.68950,
