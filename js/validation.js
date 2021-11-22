@@ -39,7 +39,7 @@ const getRoomGuestsRelation = () => {
       break;
     case '3':
       capacityOptions.forEach((capacityOption) =>
-        hideOption(capacityOption, capacityOptions.value === '0'),
+        hideOption(capacityOption, capacityOption.value === '0'),
       );
 
       break;
