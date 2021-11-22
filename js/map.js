@@ -1,4 +1,4 @@
-import { makeAllAktive, makeAllDisabled} from './form-actions.js';
+import { makeFormAktive, makeAllDisabled} from './form-actions.js';
 
 const DEFAULT_MARKER = {
   lat: 35.68950,
@@ -6,16 +6,20 @@ const DEFAULT_MARKER = {
 };
 
 const map = L.map('map-canvas')
-  .on ('load', makeAllAktive)
+  .on ('load', makeFormAktive)
   .setView(DEFAULT_MARKER, 10)
   .on ('unload', makeAllDisabled);
+
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
-).addTo(map);
+)
+  .addTo(map)
+  .on ('tileerror', makeAllDisabled)
+  .on ('tileunload', makeAllDisabled);
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',

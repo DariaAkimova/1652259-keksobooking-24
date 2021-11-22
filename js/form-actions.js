@@ -2,6 +2,7 @@ import { sendData } from './api.js';
 import {DEFAULT_MARKER, mainMarker} from './map.js';
 import { selectFilters, checkboxFilters } from './filter.js';
 import { changeMarkers } from './main.js';
+import { priceInput, minPriceFlat } from './validation.js';
 
 const offerForm = document.querySelector ('.ad-form');
 const allForms = document.querySelectorAll('form');
@@ -27,15 +28,19 @@ const makeAllDisabled = () => {
 
 makeAllDisabled();
 
-const makeAllAktive = () => {
+const makeFormAktive = () => {
   offerForm.classList.remove('ad-form--disabled');
   formFieldsets.forEach((fieldset)=> fieldset.removeAttribute('disabled'));
+};
+
+const makeFilterAktive = () => {
   mapFiltersForm.classList.remove('ad-form--disabled');
   allFilters.forEach((filter)=> filter.removeAttribute('disabled'));
 };
 
 const clearAll = () => {
   allForms.forEach((form) => form.reset());
+  priceInput.placeholder = minPriceFlat;
   selectFilters.forEach ((filter) => filter.value = 'any');
   checkboxFilters.forEach((filter) => filter.removeAttribute('checked'));
   mainMarker.setLatLng(DEFAULT_MARKER);
@@ -119,4 +124,4 @@ setOfferFormSubmit(showSuccesMessage);
 
 resetButton.addEventListener('click', clearAll);
 
-export {makeAllAktive, makeAllDisabled};
+export {makeFormAktive, makeFilterAktive, makeAllDisabled};

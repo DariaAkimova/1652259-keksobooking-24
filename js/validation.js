@@ -9,6 +9,11 @@ const capacityList  = document.querySelector('#capacity');
 const capacityOptions = capacityList.querySelectorAll('option');
 const timeIn = document.querySelector ('#timein');
 const timeOut = document.querySelector ('#timeout');
+const minPriceBungalow = '0';
+const minPriceFlat = '1000';
+const minPriceHotel = '3000';
+const minPriceHouse = '5000';
+const minPricePalace = '10000';
 
 
 const hideOption = (element, condition) => {
@@ -53,19 +58,19 @@ const changeMinPriceByType = () => {
   let minPriceValue;
   switch (typeForm.value)  {
     case 'bungalow':
-      minPriceValue = '0';
+      minPriceValue = minPriceBungalow;
       break;
     case 'flat':
-      minPriceValue = '1000';
+      minPriceValue = minPriceFlat;
       break;
     case 'hotel':
-      minPriceValue = '3000';
+      minPriceValue = minPriceHotel;
       break;
     case 'house':
-      minPriceValue = '5000';
+      minPriceValue = minPriceHouse;
       break;
     case 'palace':
-      minPriceValue = '10000';
+      minPriceValue = minPricePalace;
       break;
   }
   priceInput.placeholder = minPriceValue;
@@ -112,3 +117,4 @@ timeOut.addEventListener('change', changeTimeIn);
 timeIn.addEventListener('change', changeTimeOut);
 
 
+export {priceInput, minPriceFlat};
